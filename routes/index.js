@@ -28,6 +28,7 @@ router.get("/", async (req, res) => {
         ...p,
         image: data.sprites.other.dream_world.front_default,
       };
+      return mergedPokemon;
     });
     // not working...
     Promise.all(newPokedex).then((results) => {
