@@ -2,37 +2,25 @@ const { default: axios } = require("axios");
 const express = require("express");
 const router = express.Router();
 
-const getPokeImagesAndName = require("../middlewares/fetchPokeApi");
-
-// router.use(getPokeImagesAndName);
 router.get("/", async (req, res) => {
-  // display all the pokemons
-  // the pokemons need to be a merged object
-  // that merged pokemons we need to sent back
-  // 10
-
   const pokedex = req.app.get("pokedex");
 
-  // const pokemon = pokedex.find((p) => p.id === Number(id));
-  // if (!pokemon) {
-  //   return res.status(400).send("Pokemon not found");
-  // }
-  // pokedex.map((pok) => {
-  // pok.id === Number(id)
   try {
-    const newPokedex = pokedex.map(async (p) => {
+    //map through first 50 pokemon from jsonfile and fetch the pictures from the API
+    const newPokedex = pokedex.slice(0, 50).map(async (p) => {
       const { data } = await axios.get(
         `https://pokeapi.co/api/v2/pokemon/${p.id}`
       );
       const mergedPokemon = {
         ...p,
-        image: data.sprites.other.dream_world.front_default,
+        image: data?.sprites?.other?.dream_world?.front_default,
       };
+
+      return mergedPokemon;
     });
-    // not working...
-    Promise.all(newPokedex).then((results) => {
-      console.log(results);
-    });
+
+   const mergedPokemons = await Promise.all(newPokedex)
+   res.json(mergedPokemons);
   } catch (e) {
     console.log(e);
   }
