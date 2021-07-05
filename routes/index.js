@@ -18,26 +18,25 @@ router.get("/", async (req, res) => {
   //   return res.status(400).send("Pokemon not found");
   // }
   // pokedex.map((pok) => {
-    // pok.id === Number(id)
-    for (let id = 1; id <= 50; id++) {
-    const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
-    
-    pokedex.id === data.id
-    
-    
-    }
-    const mergedPokemonData = {
-      ...pokemon,
-      image: data.sprites.other.dream_world.front_default,
-    };
-
-    // res.json(mergedPokemonData);
+  // pok.id === Number(id)
+  try {
+    const newPokedex = pokedex.map(async (p) => {
+      const { data } = await axios.get(
+        `https://pokeapi.co/api/v2/pokemon/${p.id}`
+      );
+      const mergedPokemon = {
+        ...p,
+        image: data.sprites.other.dream_world.front_default,
+      };
+      return mergedPokemon;
+    });
+    // not working...
+    Promise.all(newPokedex).then((results) => {
+      console.log(results);
+    });
   } catch (e) {
     console.log(e);
   }
-  });
-  try {
-    
 });
 
 // /* GET home page. */ at /pokemon endpoint
@@ -45,12 +44,11 @@ router.get("/:id", async (req, res) => {
   const { id } = req.params;
   // fetch data from external ap
   const pokedex = req.app.get("pokedex");
-
   const pokemon = pokedex.find((p) => p.id === Number(id));
   if (!pokemon) {
     return res.status(400).send("Pokemon not found");
   }
-
+  console.log(pokemon);
   try {
     const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
     const mergedPokemonData = {
