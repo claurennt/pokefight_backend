@@ -3,9 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www",
-    "dev": "set DEBUG=pokefight:* & npm start"
+    "start": "node ./bin/www",
+    "chicken": "nodemon ./bin/www",
+    "dev": "set DEBUG=pokefight:* & npm run chicken"
   },
+  "engines": {
+    "node": "14.17.0"
+  },
+
   "dependencies": {
     "axios": "^0.21.1",
     "cookie-parser": "~1.4.4",
