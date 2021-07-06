@@ -2,13 +2,13 @@ const { default: axios } = require("axios");
 const express = require("express");
 const router = express.Router();
 
-router.get("/:count?", async (req, res) => {
+router.get("/display/:count?", async (req, res) => {
   const pokedex = req.app.get("pokedex");
   const { count } = req.params;
 
   try {
     //map through first 50 pokemon from jsonfile and fetch the pictures from the API
-    const newPokedex = params
+    const newPokedex = count
       ? pokedex.slice(0, count)
       : pokedex.slice(0, 50).map(async (p) => {
           const { data } = await axios.get(
