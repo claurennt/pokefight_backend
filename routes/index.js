@@ -2,25 +2,22 @@ const { default: axios } = require("axios");
 const express = require("express");
 const router = express.Router();
 
-router.get("/display/:count?", async (req, res) => {
+router.get("/", async (req, res) => {
   const pokedex = req.app.get("pokedex");
-  const { count } = req.params;
 
   try {
     //map through first 50 pokemon from jsonfile and fetch the pictures from the API
-    const newPokedex = count
-      ? pokedex.slice(0, count)
-      : pokedex.slice(0, 50).map(async (p) => {
-          const { data } = await axios.get(
-            `https://pokeapi.co/api/v2/pokemon/${p.id}`
-          );
-          const mergedPokemon = {
-            ...p,
-            image: data?.sprites?.other?.dream_world?.front_default,
-          };
+    const newPokedex = pokedex.slice(0, 50).map(async (p) => {
+      const { data } = await axios.get(
+        `https://pokeapi.co/api/v2/pokemon/${p.id}`
+      );
+      const mergedPokemon = {
+        ...p,
+        image: data?.sprites?.other?.dream_world?.front_default,
+      };
 
-          return mergedPokemon;
-        });
+      return mergedPokemon;
+    });
 
     const mergedPokemons = await Promise.all(newPokedex);
     res.json(mergedPokemons);
