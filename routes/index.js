@@ -1,6 +1,7 @@
 const { default: axios } = require("axios");
 const express = require("express");
 const router = express.Router();
+const Game = require("../models/gameSchema");
 
 router.get("/", async (req, res) => {
   const pokedex = req.app.get("pokedex");
@@ -46,6 +47,29 @@ router.get("/:id", async (req, res) => {
     res.json(mergedPokemonData);
   } catch (e) {
     res.json(pokemon);
+  }
+});
+
+router.post("/game/save", async (req, res) => {
+  const { nameFighterOne, nameFighterTwo, winner } = req.body;
+  try {
+    const newGame = await Game.create({
+      nameFighterOne,
+      nameFighterTwo,
+      winner,
+    });
+    res.json(newGame);
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+});
+
+router.get("/game/leaderboard", async (req, res) => {
+  try {
+    const games = await Game.find();
+    res.json(games);
+  } catch (e) {
+    res.status(500).send(e.message);
   }
 });
 

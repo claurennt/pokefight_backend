@@ -1,0 +1,13 @@
+###
+POST http://localhost:3001/pokemon/game/save
+Content-Type: application/json
+
+{
+"nameFighterOne": "Meltan",
+"nameFighterTwo": "Naganadel",
+"winner": "Meltan"
+}
+
+###
+GET http://localhost:3001/pokemon/game/leaderboard
+

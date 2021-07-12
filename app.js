@@ -1,3 +1,4 @@
+require("dotenv").config();
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
@@ -6,6 +7,7 @@ const logger = require("morgan");
 const jsonData = require("./data/file.json");
 const cors = require("cors");
 const app = express();
+const client = require("./db/Client.js");
 app.use(cors());
 
 const indexRouter = require("./routes/index");
